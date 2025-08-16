@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Vérifier l'authentification
+if (!Astro.locals.session) {
+  return Astro.redirect('/login');
+}
+
+const session = Astro.locals.session;
+const user = Astro.locals.user;
+const userRole = (user as any)?.role || 'user';
+---
+
+<Layout title="Dashboard">
+  <main style="max-width: 800px; margin: 2rem auto; padding: 2rem;">
+    <div style="background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; color: #333; margin: 0;">🏠 Dashboard</h1>
+        <button
+          id="logoutBtn"
+          style="padding: 0.5rem 1rem; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;"
+        >
+          Déconnexion
+        </button>
+      </div>
+
+      <!-- Navigation rapide -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <a href="/profile" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 8px; text-decoration: none; text-align: center; transition: transform 0.2s;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+          <div style="font-weight: bold;">Mon Profil</div>
+          <div style="font-size: 0.9rem; opacity: 0.9;">Gérer mes informations</div>
+        </a>
+        
+        {userRole === 'admin' && (
+          <a href="/admin" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); color: white; padding: 1.5rem; border-radius: 8px; text-decoration: none; text-align: center; transition: transform 0.2s;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+            <div style="font-weight: bold;">Administration</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Panneau admin</div>
+          </a>
+        )}
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px;">
+          <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Informations utilisateur</h2>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <p><strong>Nom:</strong> {user?.name || 'Non défini'}</p>
+            <p><strong>Email:</strong> {user?.email}</p>
+            <p><strong>Rôle:</strong> <span style={`color: ${userRole === 'admin' ? '#dc2626' : '#059669'}; font-weight: bold;`}>{userRole}</span></p>
+            <p><strong>ID:</strong> {user?.id}</p>
+            <p><strong>Créé le:</strong> {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR') : 'N/A'}</p>
+          </div>
+        </div>
+        
+        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px;">
+          <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Session</h2>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <p><strong>ID de session:</strong> {session.id}</p>
+            <p><strong>Expire le:</strong> {new Date(session.expiresAt).toLocaleDateString('fr-FR')}</p>
+            <p style="color: #059669; font-weight: 500;">✓ Connecté</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Actions rapides</h2>
+        <div style="display: flex; gap: 1rem;">
+          <a
+            href="/profile"
+            style="padding: 0.5rem 1rem; background: #4f46e5; color: white; text-decoration: none; border-radius: 4px;"
+          >
+            Modifier le profil
+          </a>
+          <a
+            href="/admin"
+            style="padding: 0.5rem 1rem; background: #7c3aed; color: white; text-decoration: none; border-radius: 4px;"
+          >
+            Administration
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/auth/sign-out', {
+          method: 'POST',
+        });
+        
+        if (response.ok) {
+          window.location.href = '/login';
+        }
+      } catch (error) {
+        console.error('Erreur lors de la déconnexion:', error);
+      }
+    });
+  </script>
+</Layout>

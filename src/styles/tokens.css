@@ -1,0 +1,98 @@
+:root {
+  /* Colors */
+  --color-primary: #007BFF;
+  --color-primary-hover: #0056CC;
+  --color-primary-light: #E7F1FF;
+  --color-neutral: #6C757D;
+  --color-neutral-light: #F8F9FA;
+  --color-neutral-dark: #495057;
+  --color-bg: #FFFFFF;
+  --color-border: #DEE2E6;
+  --color-text: #212529;
+  --color-text-muted: #6C757D;
+  --color-success: #28A745;
+  --color-warning: #FFC107;
+  --color-danger: #DC3545;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-heading: 1.5rem; /* 24px */
+  --font-size-display: 2rem; /* 32px */
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.625;
+  
+  /* Spacing Scale (8px base) */
+  --spacing-xs: 4px;   /* 0.25rem */
+  --spacing-sm: 8px;   /* 0.5rem */
+  --spacing-base: 16px; /* 1rem */
+  --spacing-md: 24px;  /* 1.5rem */
+  --spacing-lg: 32px;  /* 2rem */
+  --spacing-xl: 48px;  /* 3rem */
+  --spacing-2xl: 64px; /* 4rem */
+  --spacing-3xl: 96px; /* 6rem */
+  
+  /* Border Radius */
+  --border-radius-sm: 2px;
+  --border-radius: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-xl: 12px;
+  --border-radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+  
+  /* Z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  
+  /* Breakpoints (for JS access) */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  
+  /* Layout */
+  --sidebar-width: 240px;
+  --sidebar-width-collapsed: 60px;
+  --header-height: 60px;
+  --max-width-container: 1200px;
+  
+  /* Touch targets */
+  --touch-target: 44px;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1A1A1A;
+    --color-text: #FFFFFF;
+    --color-text-muted: #A0A0A0;
+    --color-neutral-light: #2A2A2A;
+    --color-border: #404040;
+  }
+}

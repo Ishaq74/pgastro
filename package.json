@@ -6,9 +6,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "astro": "^5.13.0"
+    "@types/nodemailer": "^7.0.0",
+    "astro": "^5.13.0",
+    "better-auth": "^1.3.6",
+    "nodemailer": "^7.0.5",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.5",
+    "@vitest/ui": "^3.2.4",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,46 +1,128 @@
-# Astro Starter Kit: Basics
+# Real CMS Admin - Dashboard Mobile-First
 
-```sh
-npm create astro@latest -- --template basics
+Un système de gestion de contenu (CMS) admin dashboard ultra-responsive et mobile-first construit avec Astro et suivant une philosophie de design minimaliste "less is more".
+
+## 🚀 Fonctionnalités
+
+- **Mobile-First Design** : Interface optimisée pour tous les appareils
+- **Ultra-Responsive** : Design adaptatif avec breakpoints intelligents
+- **Design Minimal** : Interface épurée suivant la philosophie "less is more"
+- **Système de Design Tokens** : Cohérence visuelle garantie
+- **Navigation Intelligente** : Sidebar collapsible avec état persistant
+- **Accessibilité** : Support complet des standards ARIA et navigation clavier
+- **Base de Données** : Intégration PostgreSQL avec monitoring de statut
+
+## 🎨 Charte Graphique
+
+### Couleurs
+- **Primaire** : #007BFF (bleu professionnel)
+- **Neutre** : #6C757D (gris équilibré)
+- **Arrière-plan** : #FFFFFF (blanc pur)
+- **Succès** : #28A745
+- **Attention** : #FFC107
+- **Erreur** : #DC3545
+
+### Typographie
+- **Police Principale** : 'Inter', system-ui, sans-serif
+- **Échelle** : 12px - 14px - 16px - 18px - 24px - 32px - 48px
+- **Poids** : 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
+
+### Espacement
+- **Échelle 8px** : 4px - 8px - 16px - 24px - 32px - 48px - 64px - 96px
+
+## 📱 Responsive Design
+
+### Breakpoints
+- **Mobile** : < 640px
+- **Tablet** : 640px - 768px
+- **Desktop** : > 768px
+
+### Comportements Mobile
+- Sidebar en overlay avec animation slide
+- Menu hamburger touch-optimized (44px minimum)
+- Navigation gestuelle fluide
+- Tooltips adaptatifs
+
+## 🛠️ Structure du Projet
+
+```
+src/
+├── styles/
+│   ├── tokens.css          # Design tokens (couleurs, spacing, typo)
+│   └── global.css          # Styles globaux et utilitaires
+├── layouts/
+│   ├── Layout.astro        # Layout de base
+│   └── AdminLayout.astro   # Layout admin avec sidebar
+├── pages/
+│   ├── index.astro         # Page d'accueil
+│   └── admin.astro         # Dashboard principal
+└── db.ts                   # Configuration base de données
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🔧 Technologies
 
-## 🚀 Project Structure
+- **Astro 5.13.0** : Framework de rendu statique/hybride
+- **TypeScript** : Typage statique
+- **CSS Custom Properties** : Système de design tokens
+- **PostgreSQL** : Base de données (via db.ts)
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🚦 Démarrage Rapide
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```bash
+# Installation des dépendances
+npm install
+
+# Démarrage en développement
+npm run dev
+
+# Construction pour production
+npm run build
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## 📊 Dashboard
 
-## 🧞 Commands
+Le dashboard principal (`/admin`) affiche :
 
-All commands are run from the root of the project, from a terminal:
+- **Cartes de vue d'ensemble** : Statistiques temps réel
+- **Actions rapides** : Accès direct aux fonctions principales
+- **Activité récente** : Historique des actions utilisateurs
+- **Statut système** : Monitoring des performances et connectivité
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 🎯 Philosophie de Design
 
-## 👀 Want to learn more?
+### Less is More
+- Interface épurée sans éléments superflus
+- Hiérarchie visuelle claire et logique
+- Espacements généreux pour la respiration
+- Couleurs limitées et cohérentes
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Mobile-First
+- Conception prioritaire sur mobile
+- Progressive enhancement vers desktop
+- Touch targets optimisés (44px minimum)
+- Navigation gestuelle intuitive
+
+### Performance
+- CSS optimisé avec custom properties
+- JavaScript minimal et progressif
+- Assets optimisés et lazy loading
+- Transitions fluides sans impact performance
+
+## � Authentification
+
+(À implémenter selon besoins)
+
+## 📈 Évolutions Futures
+
+- [ ] Système d'authentification complet
+- [ ] Gestion multi-tenant avancée
+- [ ] Éditeur de contenu WYSIWYG
+- [ ] Upload et gestion de médias
+- [ ] API REST complète
+- [ ] PWA (Progressive Web App)
+- [ ] Mode sombre/clair
+- [ ] Notifications push
+
+---
+
+**Développé avec ❤️ suivant les principes de design mobile-first et minimaliste**

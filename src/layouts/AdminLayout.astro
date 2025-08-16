@@ -1,0 +1,733 @@
+---
+interface Props {
+  title?: string;
+  isCollapsed?: boolean;
+}
+
+const { title = "Admin Dashboard", isCollapsed = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+  <link rel="stylesheet" href="/src/styles/global.css">
+</head>
+<body class="admin-layout">
+  <div class="layout-container">
+    <!-- Sidebar Navigation -->
+    <aside class={`sidebar ${isCollapsed ? 'collapsed' : ''}`} id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          {!isCollapsed && <h2>CMS Admin</h2>}
+          {isCollapsed && <span class="logo-icon">📊</span>}
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span class="toggle-icon"></span>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="/admin" class="nav-link active" data-tooltip="Dashboard">
+              <span class="nav-icon">🏠</span>
+              {!isCollapsed && <span class="nav-text">Dashboard</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/content" class="nav-link" data-tooltip="Content">
+              <span class="nav-icon">📝</span>
+              {!isCollapsed && <span class="nav-text">Content</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/media" class="nav-link" data-tooltip="Media">
+              <span class="nav-icon">🖼️</span>
+              {!isCollapsed && <span class="nav-text">Media</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/users" class="nav-link" data-tooltip="Users">
+              <span class="nav-icon">👥</span>
+              {!isCollapsed && <span class="nav-text">Users</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/database" class="nav-link" data-tooltip="Database">
+              <span class="nav-icon">🗄️</span>
+              {!isCollapsed && <span class="nav-text">Database</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/smtp" class="nav-link" data-tooltip="SMTP">
+              <span class="nav-icon">📧</span>
+              {!isCollapsed && <span class="nav-text">SMTP</span>}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/settings" class="nav-link" data-tooltip="Settings">
+              <span class="nav-icon">⚙️</span>
+              {!isCollapsed && <span class="nav-text">Settings</span>}
+            </a>
+          </li>
+        </ul>
+        
+        <div class="nav-footer">
+          <div class="nav-item">
+            <a href="/admin/profile" class="nav-link" data-tooltip="Profile">
+              <span class="nav-icon">👤</span>
+              {!isCollapsed && <span class="nav-text">Profile</span>}
+            </a>
+          </div>
+          <div class="nav-item">
+            <button class="nav-link logout-btn" data-tooltip="Logout">
+              <span class="nav-icon">🚪</span>
+              {!isCollapsed && <span class="nav-text">Logout</span>}
+            </button>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Header -->
+      <header class="main-header">
+        <div class="header-content">
+          <div class="header-left">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+              <span class="hamburger"></span>
+            </button>
+            <h1 class="page-title">{title}</h1>
+          </div>
+          
+          <div class="header-right">
+            <!-- Database Status -->
+            <div class="header-control">
+              <div class="db-status-indicator" id="dbStatus">
+                <span class="db-icon">🗄️</span>
+                <span class="db-text">DB</span>
+                <span class="db-dot"></span>
+              </div>
+            </div>
+            
+            <!-- SMTP Status -->
+            <div class="header-control">
+              <div class="smtp-status-indicator" id="smtpStatus">
+                <span class="smtp-icon">📧</span>
+                <span class="smtp-text">SMTP</span>
+                <span class="smtp-dot"></span>
+              </div>
+            </div>
+            
+            <!-- Language Switcher -->
+            <div class="header-control">
+              <select class="language-switcher" aria-label="Select language">
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="es">🇪🇸 ES</option>
+              </select>
+            </div>
+            
+            <!-- User Menu -->
+            <div class="header-control">
+              <button class="user-menu-btn" aria-label="User menu">
+                <div class="user-avatar">👤</div>
+                <span class="user-name sm-hidden">Admin</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content" role="main">
+        <div class="content-wrapper">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <script>
+    // Sidebar toggle functionality
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    
+    let isCollapsed = false;
+    
+    function toggleSidebar() {
+      isCollapsed = !isCollapsed;
+      sidebar.classList.toggle('collapsed', isCollapsed);
+      localStorage.setItem('sidebarCollapsed', isCollapsed.toString());
+    }
+    
+    function toggleMobileMenu() {
+      const isOpen = sidebar.classList.contains('mobile-open');
+      sidebar.classList.toggle('mobile-open');
+      mobileOverlay.classList.toggle('active');
+      document.body.classList.toggle('mobile-menu-open');
+    }
+    
+    // Event listeners
+    sidebarToggle?.addEventListener('click', toggleSidebar);
+    mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+    mobileOverlay?.addEventListener('click', toggleMobileMenu);
+    
+    // Restore sidebar state
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    if (savedState === 'true') {
+      toggleSidebar();
+    }
+    
+    // Handle navigation link active states
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+    
+    // Database status check
+    async function checkDatabaseStatus() {
+      const dbStatus = document.getElementById('dbStatus');
+      if (!dbStatus) return;
+      
+      // Set loading state
+      dbStatus.className = 'db-status-indicator loading';
+      
+      try {
+        const response = await fetch('/api/db-status');
+        const result = await response.json();
+        
+        if (result.success) {
+          dbStatus.className = 'db-status-indicator connected';
+          dbStatus.title = 'Database connected';
+        } else {
+          dbStatus.className = 'db-status-indicator error';
+          dbStatus.title = 'Database connection failed';
+        }
+      } catch (error) {
+        dbStatus.className = 'db-status-indicator error';
+        dbStatus.title = 'Database connection error';
+      }
+    }
+    
+    async function checkSmtpStatus() {
+      const smtpStatus = document.getElementById('smtpStatus');
+      if (!smtpStatus) return;
+      
+      // Set loading state
+      smtpStatus.className = 'smtp-status-indicator loading';
+      
+      try {
+        const response = await fetch('/api/smtp-status');
+        const result = await response.json();
+        
+        if (result.status === 'connected') {
+          smtpStatus.className = 'smtp-status-indicator connected';
+          smtpStatus.title = `SMTP connected - ${result.config?.host || 'Unknown host'}`;
+        } else {
+          smtpStatus.className = 'smtp-status-indicator error';
+          smtpStatus.title = `SMTP error: ${result.message}`;
+        }
+      } catch (error) {
+        smtpStatus.className = 'smtp-status-indicator error';
+        smtpStatus.title = 'SMTP connection error';
+      }
+    }
+    
+    // Check status on load
+    checkDatabaseStatus();
+    checkSmtpStatus();
+    
+    // Check status every 30 seconds
+    setInterval(() => {
+      checkDatabaseStatus();
+      checkSmtpStatus();
+    }, 30000);
+  </script>
+  
+  <style>
+    .admin-layout {
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .layout-container {
+      display: flex;
+      height: 100vh;
+    }
+    
+    /* Sidebar Styles */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--color-bg);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      transition: width var(--transition-base);
+      z-index: var(--z-fixed);
+    }
+    
+    .sidebar.collapsed {
+      width: var(--sidebar-width-collapsed);
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-base);
+      border-bottom: 1px solid var(--color-border);
+      min-height: var(--header-height);
+    }
+    
+    .logo h2 {
+      font-size: var(--font-size-lg);
+      margin: 0;
+      color: var(--color-primary);
+    }
+    
+    .logo-icon {
+      font-size: var(--font-size-heading);
+    }
+    
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      width: var(--spacing-lg);
+      height: var(--spacing-lg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .sidebar-toggle:hover {
+      background-color: var(--color-neutral-light);
+    }
+    
+    .toggle-icon {
+      width: 16px;
+      height: 2px;
+      background-color: var(--color-neutral);
+      position: relative;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .toggle-icon::before,
+    .toggle-icon::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 2px;
+      background-color: var(--color-neutral);
+      transition: transform var(--transition-fast);
+    }
+    
+    .toggle-icon::before {
+      top: -5px;
+    }
+    
+    .toggle-icon::after {
+      bottom: -5px;
+    }
+    
+    /* Navigation */
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--spacing-base) 0;
+    }
+    
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .nav-item {
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-sm) var(--spacing-base);
+      color: var(--color-text);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+      margin-right: var(--spacing-sm);
+      min-height: var(--touch-target);
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      transform: translateX(2px);
+    }
+    
+    .nav-link.active {
+      background-color: var(--color-primary);
+      color: white;
+    }
+    
+    .nav-icon {
+      font-size: var(--font-size-lg);
+      margin-right: var(--spacing-sm);
+      min-width: 24px;
+      text-align: center;
+    }
+    
+    .nav-text {
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+    }
+    
+    .collapsed .nav-text {
+      display: none;
+    }
+    
+    .nav-footer {
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--spacing-base);
+      margin-top: var(--spacing-base);
+    }
+    
+    .logout-btn {
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+    
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    
+    .main-header {
+      height: var(--header-height);
+      background-color: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      z-index: var(--z-sticky);
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 var(--spacing-base);
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-base);
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--spacing-sm);
+    }
+    
+    .hamburger {
+      width: 20px;
+      height: 2px;
+      background-color: var(--color-text);
+      display: block;
+      position: relative;
+    }
+    
+    .hamburger::before,
+    .hamburger::after {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background-color: var(--color-text);
+      position: absolute;
+    }
+    
+    .hamburger::before {
+      top: -6px;
+    }
+    
+    .hamburger::after {
+      bottom: -6px;
+    }
+    
+    .page-title {
+      font-size: var(--font-size-heading);
+      margin: 0;
+      color: var(--color-text);
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-base);
+    }
+    
+    .header-control select {
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      background-color: var(--color-bg);
+    }
+    
+    /* Database Status Indicator */
+    .db-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      background-color: var(--color-bg);
+      font-size: var(--font-size-sm);
+      min-width: 70px;
+    }
+    
+    .db-icon {
+      font-size: var(--font-size-base);
+    }
+    
+    .db-text {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-muted);
+    }
+    
+    .db-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--color-text-muted);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .db-status-indicator.connected .db-dot {
+      background-color: var(--color-success);
+    }
+    
+    .db-status-indicator.error .db-dot {
+      background-color: var(--color-danger);
+    }
+    
+    .db-status-indicator.loading .db-dot {
+      background-color: var(--color-warning);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    /* SMTP Status Indicator */
+    .smtp-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      background-color: var(--color-bg);
+      font-size: var(--font-size-sm);
+      min-width: 85px;
+    }
+    
+    .smtp-icon {
+      font-size: var(--font-size-base);
+    }
+    
+    .smtp-text {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-muted);
+    }
+    
+    .smtp-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--color-text-muted);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .smtp-status-indicator.connected .smtp-dot {
+      background-color: var(--color-success);
+    }
+    
+    .smtp-status-indicator.error .smtp-dot {
+      background-color: var(--color-danger);
+    }
+    
+    .smtp-status-indicator.loading .smtp-dot {
+      background-color: var(--color-warning);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    .user-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--spacing-xs);
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .user-menu-btn:hover {
+      background-color: var(--color-neutral-light);
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--color-primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+    }
+    
+    .user-name {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text);
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      background-color: var(--color-neutral-light);
+    }
+    
+    .content-wrapper {
+      padding: var(--spacing-md);
+      max-width: var(--max-width-container);
+      margin: 0 auto;
+    }
+    
+    /* Mobile Overlay */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: var(--z-modal);
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+    
+    .mobile-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 767px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform var(--transition-base);
+        z-index: var(--z-modal);
+      }
+      
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      
+      .main-wrapper {
+        margin-left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .page-title {
+        font-size: var(--font-size-lg);
+      }
+      
+      .header-right {
+        gap: var(--spacing-sm);
+      }
+      
+      .content-wrapper {
+        padding: var(--spacing-base);
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+      
+      .main-wrapper {
+        margin-left: 0;
+      }
+    }
+    
+    /* Tooltips for collapsed sidebar */
+    .collapsed .nav-link {
+      position: relative;
+    }
+    
+    .collapsed .nav-link:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--color-text);
+      color: var(--color-bg);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      white-space: nowrap;
+      z-index: var(--z-tooltip);
+      margin-left: var(--spacing-sm);
+    }
+  </style>
+</body>
+</html>

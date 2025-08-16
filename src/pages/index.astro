@@ -1,11 +1,123 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
-
-<Layout>
-	<Welcome />
+<Layout title="Real CMS Admin">	<main class="welcome">
+	<div class="hero">
+	<h1>Real CMS Admin</h1>
+	<p>Bienvenue dans votre système de gestion de contenu ultra-responsive et mobile-first.</p>
+	<a href="/admin" class="cta-button">Accéder au Dashboard</a>
+	</div>
+	<div class="features">
+		<div class="feature">
+			<div class="feature-icon">📱</div>
+			<h3>Mobile-First</h3>
+			<p>Interface optimisée pour tous les appareils</p>
+			</div>
+			<div class="feature">
+				<div class="feature-icon">⚡</div>
+				<h3>Ultra-Responsive</h3>
+				<p>Performance optimale sur tous les écrans</p>
+				</div>
+				<div class="feature">
+				<div class="feature-icon">🎨</div>
+				<h3>Design Minimal</h3>
+				<p>Interface épurée et intuitive</p>
+			</div>
+		</div>
+	</main>
 </Layout>
+<style>
+.welcome {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: var(--spacing-base);
+	text-align: center;
+}
+.hero {
+	max-width: 600px;
+	margin-bottom: var(--spacing-xl);
+}
+.hero h1 {
+	font-size: var(--font-size-display);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-primary);
+	margin-bottom: var(--spacing-base);
+	line-height: 1.2;
+}
+.hero p {
+	font-size: var(--font-size-lg);
+	color: var(--color-text-muted);
+	margin-bottom: var(--spacing-lg);
+	line-height: 1.6;
+}
+.cta-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-base) var(--spacing-lg);
+	background: var(--color-primary);
+	color: white;
+	text-decoration: none;
+	border-radius: var(--border-radius-lg);
+	font-weight: var(--font-weight-medium);
+	font-size: var(--font-size-base);
+	transition: all var(--transition-fast);
+	box-shadow: var(--shadow-sm);
+	border: none;
+	cursor: pointer;
+	min-height: 44px;
+}
+.cta-button:hover {
+	background: var(--color-primary-dark);
+	transform: translateY(-2px);
+	box-shadow: var(--shadow);
+}
+.cta-button:active {
+	transform: translateY(0);
+}
+.features {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: var(--spacing-lg);
+	max-width: 800px;
+	width: 100%;
+}
+.feature {
+	background: var(--color-bg);
+	border-radius: var(--border-radius-lg);
+	padding: var(--spacing-lg);
+	border: 1px solid var(--color-border);
+	transition: all var(--transition-fast);
+}
+.feature:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow);
+}
+.feature-icon {
+	font-size: var(--font-size-display);
+	margin-bottom: var(--spacing-base);
+}
+.feature h3 {
+	font-size: var(--font-size-lg);
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text);
+	margin-bottom: var(--spacing-sm);
+}
+.feature p {
+	color: var(--color-text-muted);
+	font-size: var(--font-size-base);
+	margin: 0;
+	line-height: 1.5;
+}
+@media (max-width: 640px) {
+	.hero h1 {
+		font-size: var(--font-size-heading);
+	}
+	.features {
+		grid-template-columns: 1fr;
+	}
+}
+</style>
