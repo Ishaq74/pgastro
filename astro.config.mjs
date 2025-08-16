@@ -9,6 +9,7 @@ export default defineConfig({
     mode: 'standalone'
   }),
   integrations: [],
+  middleware: './src/middleware.ts',
   server: {
     port: 4321,
     host: true

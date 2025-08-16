@@ -7,20 +7,15 @@ import { Pool } from "pg"
 import { admin } from "better-auth/plugins";
 import { captcha } from "better-auth/plugins";
 import { sendEmail } from "./smtp";
-import Database from "better-sqlite3";
 
-// Database configuration with fallback to SQLite for testing
+// Database configuration: utilise uniquement PostgreSQL
 const getDatabaseConfig = () => {
-  // Try PostgreSQL first if environment variables are set properly
-  if (process.env.POSTGRES_HOST && process.env.POSTGRES_HOST !== 'localhost') {
-    return new Pool({
-      connectionString: `postgresql://${process.env.POSTGRES_USER || 'postgres'}:${process.env.POSTGRES_PASSWORD || 'pgsql+74'}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT || '5432'}/${process.env.POSTGRES_DB || 'pgastro'}`,
-    });
+  if (!process.env.POSTGRES_HOST) {
+    throw new Error('POSTGRES_HOST doit être défini dans les variables d\'environnement.');
   }
-  
-  // Otherwise use SQLite for local development/testing
-  console.log('Using SQLite database for Better Auth (development mode)');
-  return new Database("./better-auth.db");
+  return new Pool({
+    connectionString: `postgresql://${process.env.POSTGRES_USER || 'postgres'}:${process.env.POSTGRES_PASSWORD || 'pgsql+74'}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT || '5432'}/${process.env.POSTGRES_DB || 'pgastro'}`,
+  });
 };
 
 export const auth = betterAuth({
