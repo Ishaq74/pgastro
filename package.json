@@ -10,7 +10,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "init-db": "node scripts/init-db.js"
   },
   "dependencies": {
     "@astrojs/node": "^9.4.2",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/pg": "^8.15.5",
     "@vitest/ui": "^3.2.4",
+    "tsx": "^4.20.4",
     "vitest": "^3.2.4"
   }
 }

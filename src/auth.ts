@@ -8,6 +8,7 @@ import { admin } from "better-auth/plugins";
 import { captcha } from "better-auth/plugins";
 import { sendEmail } from "./smtp";
 import Database from "better-sqlite3";
+import { initializeBetterAuthDatabase } from "./database/init";
 
 // Database configuration with fallback to SQLite for testing
 const getDatabaseConfig = () => {
@@ -22,6 +23,12 @@ const getDatabaseConfig = () => {
   console.log('Using SQLite database for Better Auth (development mode)');
   return new Database("./better-auth.db");
 };
+
+// Initialize database tables if they don't exist (async, non-blocking)
+initializeBetterAuthDatabase().catch(error => {
+  console.warn('⚠️  Could not initialize database automatically:', error instanceof Error ? error.message : 'Unknown error');
+  console.warn('💡 Try running: npm run init-db');
+});
 
 export const auth = betterAuth({
   database: getDatabaseConfig(),
