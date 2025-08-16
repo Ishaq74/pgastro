@@ -1,0 +1,57 @@
+
+> real-astro@0.0.1 dev
+> astro dev
+
+08:55:49 [WARN] [config] This project contains server-rendered routes, but no adapter is installed. This is fine for development, but an adapter will be required to build your site for production.
+08:55:49 [types] Generated 0ms
+08:55:49 [content] Syncing content
+08:55:49 [content] Synced content
+
+ astro  v5.13.2 ready in 166 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  http://10.1.0.140:4321/
+
+08:55:49 watching for file changes...
+08:56:11 [ERROR] [UnhandledRejection] Astro detected an unhandled rejection. Here's the stack trace:
+TypeError: Cannot use 'in' operator to search for 'db' in memory
+    at createKyselyAdapter (file:///home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.gn8iAL5-.mjs:47:12)
+    at getAdapter (file:///home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.DJ_t77Pd.mjs:925:42)
+    at init (file:///home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.BY1-gjw3.mjs:653:25)
+    at betterAuth (file:///home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.BY1-gjw3.mjs:827:23)
+    at eval (/home/runner/work/pgastro/pgastro/src/auth.ts:7:50)
+    at async ESModulesEvaluator.runInlinedModule (file:///home/runner/work/pgastro/pgastro/node_modules/vite/dist/node/module-runner.js:1062:5)
+    at async SSRCompatModuleRunner.directRequest (file:///home/runner/work/pgastro/pgastro/node_modules/vite/dist/node/module-runner.js:1284:61)
+    at async SSRCompatModuleRunner.directRequest (file:///home/runner/work/pgastro/pgastro/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:25274:23)
+    at async SSRCompatModuleRunner.cachedRequest (file:///home/runner/work/pgastro/pgastro/node_modules/vite/dist/node/module-runner.js:1180:76)
+    at async eval (/home/runner/work/pgastro/pgastro/src/middleware.ts:4:31)
+  Hint:
+    Make sure your promises all have an `await` or a `.catch()` handler.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/unhandled-rejection/
+  Stack trace:
+    at /home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.gn8iAL5-.mjs:47:12
+    [...] See full stack trace in the browser, or rerun with --verbose.
+08:56:11 [ERROR] Cannot use 'in' operator to search for 'db' in memory
+  Stack trace:
+    at createKyselyAdapter (file:///home/runner/work/pgastro/pgastro/node_modules/better-auth/dist/shared/better-auth.gn8iAL5-.mjs:47:12)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+(node:4127) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 23)
+(Use `node --trace-warnings ...` to show where the warning was created)
+08:56:51 [ERROR] [MiddlewareCantBeLoaded] An unknown error was thrown while loading your middleware.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/middleware-cant-be-loaded/
+  Stack trace:
+    at /home/runner/work/pgastro/pgastro/node_modules/astro/dist/core/middleware/loadMiddleware.js:8:24
+    [...] See full stack trace in the browser, or rerun with --verbose.
+  Caused by:
+  Cannot find module 'better-sqlite3' imported from '/home/runner/work/pgastro/pgastro/src/auth.ts'
+    at fetchModule (file:///home/runner/work/pgastro/pgastro/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46813:19)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+08:57:14 Configuration file updated. Restarting...
+08:57:14 [vite] Re-optimizing dependencies because vite config has changed
+08:57:14 [content] Syncing content
+08:57:14 [content] Synced content
+08:57:14 [types] Generated 202ms
+08:57:14 [vite] Re-optimizing dependencies because vite config has changed
+08:57:16 [200] / 227ms

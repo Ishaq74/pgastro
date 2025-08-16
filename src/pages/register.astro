@@ -73,7 +73,7 @@ if (Astro.locals.session) {
       const password = formData.get('password') as string;
       
       try {
-        const response = await fetch('/api/auth/sign-up', {
+        const response = await fetch('/api/direct-signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

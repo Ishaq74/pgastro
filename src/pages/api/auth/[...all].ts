@@ -13,5 +13,16 @@ import { auth } from "../../../auth"
 // etc.
 
 export const ALL: APIRoute = async (context) => {
+  console.log(`Better Auth API: ${context.request.method} ${context.url.pathname}`)
+  return auth.handler(context.request)
+}
+
+export const GET: APIRoute = async (context) => {
+  console.log(`Better Auth GET: ${context.url.pathname}`)
+  return auth.handler(context.request)
+}
+
+export const POST: APIRoute = async (context) => {
+  console.log(`Better Auth POST: ${context.url.pathname}`)
   return auth.handler(context.request)
 }
