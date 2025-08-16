@@ -1,5 +1,5 @@
 /**
- * Configuration Better Auth avec stockage en mémoire pour démo
+ * Configuration Better Auth avec SQLite pour démo
  */
 
 import { betterAuth } from "better-auth"
@@ -7,33 +7,33 @@ import { admin } from "better-auth/plugins";
 import Database from "better-sqlite3";
 import { sendEmail } from "./smtp.js";
 
-// Create an in-memory SQLite database for demo
-const db = new Database(':memory:');
+// Create a persistent SQLite database for demo (in tmp to avoid committing)
+const db = new Database('/tmp/pgastro-auth.db');
 
-// Initialize Better Auth tables
+// Manually create Better Auth tables with correct schema
 try {
-  // Create basic Better Auth tables
+  console.log('Creating Better Auth tables...');
   db.exec(`
     CREATE TABLE IF NOT EXISTS user (
       id TEXT PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
+      email TEXT UNIQUE NOT NULL,
       emailVerified INTEGER DEFAULT 0,
       name TEXT,
       image TEXT,
       role TEXT DEFAULT 'user',
-      createdAt INTEGER DEFAULT (strftime('%s', 'now')),
-      updatedAt INTEGER DEFAULT (strftime('%s', 'now'))
+      createdAt INTEGER DEFAULT (unixepoch()),
+      updatedAt INTEGER DEFAULT (unixepoch())
     );
     
     CREATE TABLE IF NOT EXISTS session (
       id TEXT PRIMARY KEY,
       userId TEXT NOT NULL,
       expiresAt INTEGER NOT NULL,
-      token TEXT NOT NULL,
+      token TEXT,
       ipAddress TEXT,
       userAgent TEXT,
-      createdAt INTEGER DEFAULT (strftime('%s', 'now')),
-      updatedAt INTEGER DEFAULT (strftime('%s', 'now')),
+      createdAt INTEGER DEFAULT (unixepoch()),
+      updatedAt INTEGER DEFAULT (unixepoch()),
       FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE
     );
     
@@ -45,12 +45,13 @@ try {
       accessToken TEXT,
       refreshToken TEXT,
       idToken TEXT,
-      accessTokenExpiresAt INTEGER,
-      refreshTokenExpiresAt INTEGER,
+      expiresAt INTEGER,
+      tokenType TEXT,
       scope TEXT,
       password TEXT,
-      createdAt INTEGER DEFAULT (strftime('%s', 'now')),
-      updatedAt INTEGER DEFAULT (strftime('%s', 'now')),
+      salt TEXT,
+      createdAt INTEGER DEFAULT (unixepoch()),
+      updatedAt INTEGER DEFAULT (unixepoch()),
       FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE
     );
     
@@ -59,16 +60,16 @@ try {
       identifier TEXT NOT NULL,
       value TEXT NOT NULL,
       expiresAt INTEGER NOT NULL,
-      createdAt INTEGER DEFAULT (strftime('%s', 'now')),
-      updatedAt INTEGER DEFAULT (strftime('%s', 'now'))
+      createdAt INTEGER DEFAULT (unixepoch()),
+      updatedAt INTEGER DEFAULT (unixepoch())
     );
 
-    CREATE INDEX IF NOT EXISTS idx_user_email ON user(email);
-    CREATE INDEX IF NOT EXISTS idx_session_userId ON session(userId);
-    CREATE INDEX IF NOT EXISTS idx_account_userId ON account(userId);
-    CREATE INDEX IF NOT EXISTS idx_verification_identifier ON verification(identifier);
+    CREATE INDEX IF NOT EXISTS user_email_idx ON user(email);
+    CREATE INDEX IF NOT EXISTS session_userId_idx ON session(userId);
+    CREATE INDEX IF NOT EXISTS account_userId_idx ON account(userId);
+    CREATE INDEX IF NOT EXISTS verification_identifier_idx ON verification(identifier);
   `);
-  console.log('✅ Better Auth SQLite tables created successfully');
+  console.log('✅ Better Auth tables created successfully');
 } catch (error) {
   console.error('❌ Error creating Better Auth tables:', error);
 }
@@ -143,3 +144,6 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET || "super-secret-key-for-development-only-change-in-production",
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:4321",
 })
+
+// Log successful initialization
+console.log('✅ Better Auth initialized successfully with SQLite database')
